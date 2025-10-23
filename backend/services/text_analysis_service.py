@@ -25,9 +25,9 @@ def evaluate_embeddings_and_ocr(file_path):
         },
         "analysis":{
             "sequence_similarity_score": round(sequence_similarity_score, 3), 
-            "is_sequentially_tampered": bool(sequence_similarity_score < 0.95),
+            "is_sequentially_tampered": bool(sequence_similarity_score < 0.90),
             "cosine_similarity_score": round(cosine_similarity_score, 3), 
-            "is_semantically_tampered": bool(cosine_similarity_score < 0.8)
+            "is_semantically_tampered": bool(cosine_similarity_score < 0.95)
         }
     }
 
