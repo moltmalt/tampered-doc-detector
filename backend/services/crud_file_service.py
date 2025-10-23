@@ -13,9 +13,11 @@ async def save_file(file):
     if file_exists is True:
         new_filename = new_filename_maker(file.filename)
         new_file_path = path_joiner(UPLOAD_DIRECTORY, file_format, new_filename)
-        return await save_file_to_storage(new_file_path, content)
+        message = await save_file_to_storage(new_file_path, content)
+        return message
     
-    return await save_file_to_storage(file_path, content)
+    message = await save_file_to_storage(file_path, content)
+    return message
 
 
 def rename_file_path(new_filename):
@@ -23,4 +25,5 @@ def rename_file_path(new_filename):
     new_filename_path = path_joiner(folder_path, new_filename)
 
     return new_filename_path
+
 

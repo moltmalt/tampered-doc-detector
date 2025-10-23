@@ -1,9 +1,9 @@
 from fastapi import APIRouter, File, UploadFile
 
-from services.file_service import save_file
+from services.file_upload_orchestrator import process_upload
 
 router = APIRouter()
 
 @router.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
-    return await save_file(file)
+    return await process_upload(file)
