@@ -9,6 +9,8 @@ def path_joiner(path_1, path_2, path_3 = None):
 
     return final_path
 
-def get_actual_file_name(filename):
-    return os.path.splitext(filename)
+def get_actual_filename(filename):
+    return os.path.splitext(filename)[0]
 
+def get_filename_from_path(filepath):
+    return os.path.basename(filepath)

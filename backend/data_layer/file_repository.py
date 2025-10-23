@@ -1,7 +1,8 @@
 import os
 from core.config import UPLOAD_DIRECTORY
+from .os_funcs import get_filename_from_path
 
-# this file should ONLY accept file paths
+# this file should ONLY accept file paths and file contents
 
 async def save_file_to_storage(save_path, content):
     with open(save_path, "wb") as f:
@@ -9,7 +10,8 @@ async def save_file_to_storage(save_path, content):
 
     return {
         "status": True,
-        "filename": os.path.basename(save_path)
+        "filename": get_filename_from_path(save_path),
+        "file_path": save_path
     }
 
 def get_file(file_path):
@@ -18,7 +20,7 @@ def get_file(file_path):
     if file_exists:
         return {
                 "status": True,
-                "filename": filename
+                "filename": get_filename_from_path(file_path)
             }
         
     return{
