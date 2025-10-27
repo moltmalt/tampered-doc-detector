@@ -1,16 +1,10 @@
-from .pdf_file_service import get_embedded_pdf_text, convert_pdf_to_image
-from .img_file_service import ocr_img
 from data_layer.os_funcs import get_filename_from_path
 
 from difflib import SequenceMatcher
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-def evaluate_embeddings_and_ocr(file_path):
-    images = convert_pdf_to_image(file_path)
-    embedded_texts = get_embedded_pdf_text(file_path)
-
-    ocr_texts = ocr_img(images)
+def evaluate_embeddings_and_ocr(file_path, embedded_texts, ocr_texts):
     
     sequence_similarity_score = SequenceMatcher(None, embedded_texts, ocr_texts).ratio()
 
