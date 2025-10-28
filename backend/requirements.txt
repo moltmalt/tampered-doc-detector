@@ -26,6 +26,7 @@ pdf2image==1.17.0
 pdfminer.six==20250506
 pillow==12.0.0
 proto-plus==1.26.1
+PyMuPDF==1.24.14
 protobuf==5.29.5
 pyasn1==0.6.1
 pyasn1_modules==0.4.2

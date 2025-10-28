@@ -10,18 +10,36 @@ from .pdf_file_service import get_embedded_pdf_text, convert_pdf_to_image
 from .img_file_service import ocr_img
 
 async def process_upload(file: UploadFile):
-
     message = await save_file(file)
     file_path = message["file_path"]
-    analysis_result = {
-
-    }
+    analysis_result = {}
 
     images = convert_pdf_to_image(file_path)
     embedded_texts = get_embedded_pdf_text(file_path)
     ocr_texts = ocr_img(images)
 
-    # First Phase
+    math_analysis_result = embeddings_ocr_subproces(
+        analysis_result, 
+        file_path, 
+        embedded_texts, 
+        ocr_texts
+        )
+    
+    analysis = math_analysis_result.get("math_analysis", {}).get("analysis", {})
+    cosine_score = analysis.get("cosine_similarity_score")
+    sequence_score = analysis.get("sequence_similarity_score")
+
+    if cosine_score < 0.9 or sequence_score < 0.95:
+        embeddings_ocr_gemini_result_text = analyze_embeddings_ocr_with_gemini_subprocess(
+            analysis_result,
+            embedded_texts,
+            ocr_texts
+            )
+    
+    return analysis_result
+
+
+def embeddings_ocr_subproces(analysis_result, file_path, embedded_texts, ocr_texts):
     try:
         math_analysis_result = evaluate_embeddings_and_ocr(
             file_path,
@@ -35,28 +53,23 @@ async def process_upload(file: UploadFile):
             "error":"Analysis failed",
             "message": str(e)
         }
-    
-    print(math_analysis_result)
-    
-    analysis = math_analysis_result.get("analysis", {})
-    cosine_score = analysis.get("cosine_similarity_score")
-    sequence_score = analysis.get("sequence_similarity_score")
+    return analysis_result
 
-    if cosine_score < 0.9 or sequence_score < 0.95:
-        # Second Phase 
-        try:
-            gemini_result_text = analyze_embeddings_ocr_with_gemini(
-                embedded_texts,
-                ocr_texts
-            )
-            print(f"Raw Gemini response: {gemini_result_text}")
+
+def analyze_embeddings_ocr_with_gemini_subprocess(analysis_result, embedded_texts, ocr_texts):
+    try:
+        embeddings_ocr_gemini_result_text = analyze_embeddings_ocr_with_gemini(
+            embedded_texts,
+            ocr_texts
+        )
             
-            gemini_analysis = json.loads(gemini_result_text)
-            analysis_result["ai_analysis"] = gemini_analysis
+        gemini_analysis = json.loads(embeddings_ocr_gemini_result_text)
+        analysis_result["ai_analysis"] = gemini_analysis
             
-        except Exception as e:
-            print(f"Gemini analysis failed: {e}")
-            analysis_result["ai_analysis"] = None
-            analysis_result["ai_analysis_error"] = str(e)
+    except Exception as e:
+        print(f"Gemini analysis failed: {e}")
+        analysis_result["ai_analysis"] = None
+        analysis_result["ai_analysis_error"] = str(e)
     
     return analysis_result
+    
