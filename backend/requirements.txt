@@ -35,7 +35,6 @@ pycryptodome==3.23.0
 pydantic==2.12.3
 pydantic_core==2.41.4
 pyparsing==3.2.5
-pytesseract==0.3.13
 python-dotenv==1.2.1
 python-multipart==0.0.20
 requests==2.32.5

@@ -14,17 +14,4 @@ def get_poppler_path():
             return path
     return None
 
-def get_tesseract_path():
-    tesseract = shutil.which("tesseract")
-
-    if tesseract:
-        return tesseract
-    
-    for path in ["/opt/homebrew/bin/tesseract", "/usr/local/bin/tesseract", "/usr/bin/tesseract"]:
-        if os.path.exists(path):
-            return path
-
-    return "tesseract"
-
 POPPLER_PATH = get_poppler_path()
-TESSERACT_PATH = get_tesseract_path()
