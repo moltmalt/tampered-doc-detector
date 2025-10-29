@@ -30,4 +30,5 @@ def new_filename_maker(filename):
 
     return new_filename
     
-
+def clean_json_response(json_response):
+    return json_response.replace('\n', ' ').replace('\r', ' ').replace('\t', ' ')
